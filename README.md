@@ -13,10 +13,15 @@ The project was developed as a university project and provides a basic simulatio
 
 - [Project Description](#project-description)
 - [How to Run the Project](#how-to-Run-the-Project)
-- [Usage](#usage)
-    - [Running ArUco Scanner on a Video File](#running-aruco-scanner-on-a-video-file)
-    - [Running ArUco Scanner Live](#running-aruco-scanner-live)
-- [Modifying ArUco Tag Parameters](#modifying-aruco-tag-parameters)
+- [The Game GUI SFML](#The-Game-GUI-SFM)
+    - [Opening Game](#Opening-Game)
+    - [The Menu In Game](#the-Menu-In-game)
+    - [The Game](#The-Game)
+- [Classes In Project](#Classes-In-Project)
+- [Rules](#Rules)
+
+  
+![monopoli1](https://github.com/user-attachments/assets/3aabdda5-5f17-4adf-8f5a-56cf35fdd524)
 
 
 ## Project Description
@@ -32,7 +37,7 @@ To run the project, you'll need linux.
 1. **Requirements**:
    - Install [SFML 2.6.1](https://www.sfml-dev.org/download.php).
    - A C++ compiler g++.
-   - CMake for building the project.
+   - CMake for building the project(makefile).
 
 2. **Building the Project**:
    - Clone the repository:
@@ -70,23 +75,22 @@ To run the project, you'll need linux.
   
 </pre>
 
-## The Game
+## The Game GUI SFML
 
 ### Opening Game
 
-T
-```sh
-c
-py
-```
-Replace
+In The Opening Of The Game there are 3 Buttons
+- Play
+- Rules
+- Exit
+
 
 ### The Menu In Game
+In The Menu Of The Game ,The User need to enter a number(how much players in game)
+After that, To Give The Players Names(each player)
 
-- Use 
-- The 
 
-### How The Game Look
+### The Game
 
 
 ### How To Roll And Buile
