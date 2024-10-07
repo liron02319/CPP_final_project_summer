@@ -87,7 +87,10 @@ In The Opening Of The Game there are 3 Buttons
 
 ### The Menu In Game
 In The Menu Of The Game ,The User need to enter a number(how much players in game)
+
 After that, To Give The Players Names(each player)
+
+
 
 
 ### The Game
@@ -97,6 +100,10 @@ After that, To Give The Players Names(each player)
 
 
 ## Rules
+-You Can Read The Rules(English) [Here](https://github.com/liron02319/CPP_final_project_summer/wiki/Rules-Game-Monopoly)
+
+-or below:
+
 
 
 # פרויקט גמר - מונופול
