@@ -13,7 +13,7 @@ The project was developed as a university project and provides a basic simulatio
 
 - [Project Description](#project-description)
 - [How to Run the Project](#how-to-Run-the-Project)
-- [The Game GUI SFML](#The-Game-GUI-SFM)
+- [The Game GUI SFML](#The-Game-GUI-SFML)
     - [Opening Game](#Opening-Game)
     - [The Menu In Game](#the-Menu-In-game)
     - [The Game](#The-Game)
