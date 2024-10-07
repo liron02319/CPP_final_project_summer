@@ -1,4 +1,100 @@
-# CPP_final_project_summer
+<p align="center">
+  <img src="https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/05/tai-monopoly.jpg" alt="monopoly_logo" style="width:450px; height:300px;" align="right">
+</p>
+
+
+# Monopoly Game Project
+
+This project is a C++ implementation of a Monopoly-like game with a graphical interface using SFML (Simple and Fast Multimedia Library).
+for more details about SFML GUI - https://www.sfml-dev.org/tutorials/2.6/
+The project was developed as a university project and provides a basic simulation of the classic Monopoly game, including players, properties, dice rolls, and gvarious game actions.
+
+## Table of Contents
+
+- [Project Description](#project-description)
+- [How to Run the Project](#howtoRuntheProject)
+- [Usage](#usage)
+    - [Running ArUco Scanner on a Video File](#running-aruco-scanner-on-a-video-file)
+    - [Running ArUco Scanner Live](#running-aruco-scanner-live)
+- [Modifying ArUco Tag Parameters](#modifying-aruco-tag-parameters)
+
+
+## Project Description
+
+The final project is a version of the familiar and well-known game "Monopoly". Monopoly is a board game that contains 2-8 players and is based on the business world. In this project you will realize a version of the game intended for 2 to 8 players playing through the same computer.
+The project is a C++ implementation of a Monopoly-like game with a graphical interface using SFML (Simple and Fast Multimedia Library)
+
+
+## How to Run the Project
+
+To run the project, you'll need linux. 
+
+1. **Requirements**:
+   - Install [SFML 2.6.1](https://www.sfml-dev.org/download.php).
+   - A C++ compiler g++.
+   - CMake for building the project.
+
+2. **Building the Project**:
+   - Clone the repository:
+     ```
+     git clone https://github.com/liron02319/CPP_final_project_summer.git
+
+     ```
+   - Move to the project directory:
+     ```
+     cd CPP_final_project_summer-main
+     ```
+   - Build the project using CMake:
+     ```
+     make all
+     ```
+   - Run the executable:
+     ```
+     ./MonopolyGame
+     ```
+   
+
+    
+### Classes In Project
+<pre>
+
+ Dice.cpp
+ Button.cpp
+ Player.cpp
+ Slot.cpp
+ Openning.cpp
+ Menu.cpp
+ Main.cpp
+ Game.cpp
+ 
+  
+</pre>
+
+## The Game
+
+### Opening Game
+
+T
+```sh
+c
+py
+```
+Replace
+
+### The Menu In Game
+
+- Use 
+- The 
+
+### How The Game Look
+
+
+### How To Roll And Buile
+
+
+## Rules
+
+
 # פרויקט גמר - מונופול
 פרויקט הגמר הוא גרסה של המשחק המוכר והידוע "מונופול".
 מונופול הוא משחק לוח המכיל 2-8 שחקנים ומבוסס על עולם העסקים.
@@ -60,6 +156,8 @@
 כמו כן, עליכם לבנות ממשק גרפי המדגים את המשחק, עליכם להדפיס את לוח המשחק והשחקנים על הלוח וליצור ממשק המאפשר לכל השחקנים לשחק בצורה מובנת (כלומר, כל שחקן יכול לראות את המשבצות הפנויות/תפוסות ואת הדברים שבבעלותו).
 
 עליכם גם לכתוב טסטים מקיפים לקוד שכתבתם וגם להוסיף README מפורט.
+
+
 
 לרשותכם כמה חומרי עזר:
 * לקריאה נוספת על חוקי המשחק והלוח: https://en.wikipedia.org/wiki/Monopoly_(game) 
