@@ -16,7 +16,11 @@ The project was developed as a university project and provides a basic simulatio
 - [The Game GUI SFML](#The-Game-GUI-SFML)
     - [Opening Game](#Opening-Game)
     - [The Menu In Game](#the-Menu-In-game)
-    - [The Game](#The-Game)
+    - [The Game Board](#The-Game-Board)
+    - [Your Turn](#Your-Turn)
+    - [How To Roll And Build](#How-To-Roll-And-Build)
+    - [Slot Message](#Slot-Message)
+      
 - [Classes In Project](#Classes-In-Project)
 - [Rules](#Rules)
 
@@ -60,6 +64,64 @@ To run the project, you'll need linux.
    
 
     
+## The Game GUI SFML
+
+### Opening Game
+
+In The Opening Of The Game there are 3 Buttons
+- Play
+- Rules
+- Exit
+- 
+![readmeOpenning](https://github.com/user-attachments/assets/40a2536e-fd11-4a9b-a7fb-28dd1420037a)
+
+
+### The Menu In Game
+In The Menu Of The Game ,The User need to enter a number(how much players in game)
+
+![enternumberplayers](https://github.com/user-attachments/assets/e571404c-d6fe-4a67-9c12-a537a94c7cc8)
+
+After that, To Give The Players Names(each player)
+
+![entername](https://github.com/user-attachments/assets/6dad0670-f32f-48ec-a0ea-9cd92b82230b)
+
+
+### The Game Board
+
+
+
+### Your Turn
+
+When your Name Will be In Color Yellow And Your Token Will be In Silver Color Its your turn
+
+![yourturn1](https://github.com/user-attachments/assets/6cac633f-6c5b-4075-ae9f-973472b7295a)
+
+When your Name Will Not be In Color Yellow And Your Token Will be In Gold Color Its NOT your turn
+
+![notyourturn](https://github.com/user-attachments/assets/ea1f6168-a6c4-4fc0-911c-41c92b47b83f)
+
+
+
+### How To Roll And Build
+
+To Roll the Dice ,the player need to press on Roll button
+
+![rolldice](https://github.com/user-attachments/assets/75a9cf75-fa70-4c9a-9aff-067e9f101e9d)
+
+To Build a House ,the player need to press on Build button(only according the rules)
+
+![build](https://github.com/user-attachments/assets/4e5b11bc-8462-484e-871a-9e8bccf98fd0)
+
+
+### Slot Message
+
+If The Player roll the dice and stand on slot(that he can buy) 
+will pop up the player the choice YES/NO
+
+
+![message](https://github.com/user-attachments/assets/d2cb9d38-26e6-447a-ba3d-e24251a4c429)
+
+
 ### Classes In Project
 <pre>
 
@@ -74,29 +136,6 @@ To run the project, you'll need linux.
  
   
 </pre>
-
-## The Game GUI SFML
-
-### Opening Game
-
-In The Opening Of The Game there are 3 Buttons
-- Play
-- Rules
-- Exit
-
-
-### The Menu In Game
-In The Menu Of The Game ,The User need to enter a number(how much players in game)
-
-After that, To Give The Players Names(each player)
-
-
-
-
-### The Game
-
-
-### How To Roll And Buile
 
 
 ## Rules
