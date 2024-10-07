@@ -72,7 +72,7 @@ In The Opening Of The Game there are 3 Buttons
 - Play
 - Rules
 - Exit
-- 
+
 ![readmeOpenning](https://github.com/user-attachments/assets/40a2536e-fd11-4a9b-a7fb-28dd1420037a)
 
 
