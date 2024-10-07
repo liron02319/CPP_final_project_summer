@@ -12,7 +12,7 @@ The project was developed as a university project and provides a basic simulatio
 ## Table of Contents
 
 - [Project Description](#project-description)
-- [How to Run the Project](#howtoRuntheProject)
+- [How to Run the Project](#how-to-Run-the-Project)
 - [Usage](#usage)
     - [Running ArUco Scanner on a Video File](#running-aruco-scanner-on-a-video-file)
     - [Running ArUco Scanner Live](#running-aruco-scanner-live)
