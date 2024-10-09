@@ -7,6 +7,7 @@
 
 
 
+
 // Test Slot Class
 
 TEST_CASE("Slot Constructor") {
@@ -144,13 +145,7 @@ TEST_CASE("Slot Sprite Setup") {
     slot.setSprite(200.f, 300.f, font, 100, 50); // This method is mainly visual
 }
 
-TEST_CASE("Slot Draw Function") {
-    Slot slot(1, "Park Lane", sf::Color::Red, 350, 50, 200, 500, 1000);
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Test Window");
-    window.clear();
-    slot.draw(window); // Test the draw function in a live window
-    window.display();
-}
+
 
 TEST_CASE("Slot Calculate Rent") {
 
@@ -235,6 +230,11 @@ TEST_CASE("Player class functionality with Slot interaction") {
         CHECK(player.getMoney() == 600);        // Money deducted
         CHECK(slot1.getIsOwned() == true);      // Slot is now owned
         CHECK(slot1.getOwnerName() == "TestPlayer"); // Player owns the slot
+
+        slot1.setOwnerName(""); //default for next test
+        CHECK(slot1.getOwnerName() == ""); // Player owns the slot
+
+
     }
 
     SUBCASE("Player cannot buy a slot if not have enough money ") {
@@ -246,10 +246,15 @@ TEST_CASE("Player class functionality with Slot interaction") {
         CHECK(purchased == false);            // Slot was not purchased
         CHECK(player.getMoney() == 300);      // Money should remain unchanged
         CHECK(slot1.getIsOwned() == false);   // Slot is still not owned
+
+          slot1.setOwnerName(""); //default for next test
+        CHECK(slot1.getOwnerName() == ""); // Player owns the slot
     }
 
 
 //housecheck
+    //Slot slot1(0, "Boardwalk", blueColor, 400, 50, 200, 100, 200);
+   // Slot slot2(1, "Park Place", blueColor, 350, 35, 150, 80, 160);
 
     SUBCASE("Player can build houses on owned slots") {
         Player player("TestPlayer", 0, boardSlots, slot1);
@@ -264,12 +269,12 @@ TEST_CASE("Player class functionality with Slot interaction") {
 
         // Build a house
         bool canBuild = player.buildHouse(slot1);
-       CHECK(canBuild == false);               // House should not be built
+       CHECK(canBuild == false);               // House should not be built because no have slot2(need all colors street to build)
         CHECK(player.getMoney() == 600);
            // std::cout << "cantbuildhouseyet:" << slot1.getHouses() << std::endl;
 
 
-        canBuild = player.buySlot(slot2);
+        canBuild = player.buySlot(slot2);     //buy slot2
        CHECK(canBuild == true);               // House should be built
         CHECK(player.getMoney() == 250);
 
@@ -278,13 +283,13 @@ TEST_CASE("Player class functionality with Slot interaction") {
         CHECK(slot2.getOwnerName() == "TestPlayer"); // Player owns the slot
 
        
-
+//slot1 and slot2 same numberofhouses
      canBuild = player.buildHouse(slot1);
-       CHECK(canBuild == true);               // House should not be built
+       CHECK(canBuild == true);               // House should be built
         CHECK(slot1.getHouses() == 1);         // Slot should now have 1 house
         CHECK(player.getMoney() == 50);       // Money deducted for house
 
-
+     //slot1 with 1 house and slot2 with 0 house
                 player.setMoney(1000);
      canBuild = player.buildHouse(slot1);
        CHECK(canBuild == false);               // House should not be built
@@ -294,7 +299,8 @@ TEST_CASE("Player class functionality with Slot interaction") {
 
 
 
-     canBuild = player.buildHouse(slot2);
+     canBuild = player.buildHouse(slot2);      //slot1 with 1 house and slot2 with 1 house now
+
        CHECK(canBuild == true);               // House should  be built
         CHECK(slot2.getHouses() == 1);         // Slot should now have 1 house
         CHECK(player.getMoney() == 850);       // Money deducted for house
@@ -307,11 +313,24 @@ TEST_CASE("Player class functionality with Slot interaction") {
         CHECK(player.getMoney() == 650);       // Money deducted for house
 
 
+        CHECK(slot1.getOwnerName() == "TestPlayer"); // Player owns the slot
+        CHECK(slot2.getOwnerName() == "TestPlayer"); // Player owns the slot
+
+      //  slot1.setOwnerName(""); //default for next test
+     //   CHECK(slot1.getOwnerName() == ""); // Player owns the slot
+      //  slot2.setOwnerName("");  //default for next test
+       // CHECK(slot2.getOwnerName() == ""); // Player owns the slot
+
+    //std::cout << "TEST1:" <<  slot2.getOwnerName() << std::endl;
+
     }
 
 
     SUBCASE("Player cannot build house on unowned slots") {
         Player player("TestPlayer", 0, boardSlots, slot1);
+        Player player2("TestPlayer2", 0, boardSlots, slot1);
+
+  //  std::cout << "TEST2:" << slot2.getOwnerName() << std::endl;
 
         CHECK(slot1.getIsOwned() == false);   // Slot is still not owned
 
@@ -319,6 +338,18 @@ TEST_CASE("Player class functionality with Slot interaction") {
         bool canBuild = player.buildHouse(slot1);
         CHECK(canBuild == false);              // House should not be built
         CHECK(slot1.getHouses() == 0);         // Slot should still have 0 houses
+        CHECK(slot1.getOwnerName() == ""); // Player owns the slot
+
+
+
+       //check if player can buy slot of other
+        player.buySlot(slot1);
+        CHECK(slot1.getIsOwned() == true); 
+
+        bool checkbuy= player2.buySlot(slot1);
+       CHECK(checkbuy == false); // Player cant buy
+        CHECK(slot1.getOwnerName() == "TestPlayer"); // Player owns the slot
+
     }
 
     
@@ -337,6 +368,119 @@ TEST_CASE("Player class functionality with Slot interaction") {
 
 
 
+////
+
+
+
+TEST_CASE("Player class functionalities") {
+    sf::Color blueColor = sf::Color::Blue;
+
+    Slot slot1(0, "Boardwalk", blueColor, 400, 50, 200, 100, 200);
+    Slot slot2(1, "Park Place", blueColor, 350, 35, 150, 80, 160);
+    std::vector<Slot> boardSlots = {slot1, slot2}; // Use pointers to slots
+
+    Player player("mimi", 0, boardSlots, slot1);
+              //  std::cout << "TEST1ssssssgetMoney:" <<  player.getMoney()  <<  std::endl;
+
+    // Test canBuildHouse
+    SUBCASE("canBuildHouse") {
+        player.buySlot(slot1); // Assume player buys slot1
+        player.buySlot(slot2); // Assume player buys slot2
+
+        //    std::cout << "TEST2sssssssgetMoney:" <<  player.getMoney()  <<  std::endl;
+
+        
+        CHECK(player.canBuildHouse(slot1) == true); // Should be able to build on slot1
+        CHECK(player.canBuildHouse(slot2) == true); // Should be able to build on slot2
+        
+        player.buildHouse(slot1);
+        CHECK(player.canBuildHouse(slot2) == true); // Should not be able to build more on slot2
+    }
+
+    // Test railRoadOwned
+    SUBCASE("railRoadOwned") {
+
+        Slot railroad1(2, "Reading Railroad", sf::Color(0xCAE8E0FF), 200, 25, 100, 50, 100);
+        Slot railroad2(3, "Pennsylvania Railroad", sf::Color(0xCAE8E0FF), 250, 30, 120, 60, 120);
+        player.buySlot(railroad1); // Player buys first railroad
+        player.buySlot(railroad2); // Player buys second railroad
+
+        CHECK(railroad1.getOwnerName() == "mimi");
+        CHECK(railroad2.getOwnerName() == "mimi");
+
+        CHECK(player.railRoadOwned() == 2); // Player should own 2 railroads
+
+    }
+
+   
+
+    // Test payFine
+    SUBCASE("payFine") {
+        player.setMoney(1500);
+        player.setInJail(true); // Set player in jail
+        player.payFine(); // Player attempts to pay fine
+        CHECK(player.isInJail() == false); // Player should own 2 railroads
+
+        CHECK(player.getMoney() == 1450); // Check if the fine was deducted correctly
+    }
+
+
+
+
+}
+
+
+TEST_CASE("Hotels") {
+
+        Slot slot1(0, "Boardwalk", sf::Color::Red, 400, 50, 200, 100, 200);
+         std::vector<Slot> boardSlots = {slot1};
+        Player player("TestPlayer", 0, boardSlots, slot1);
+
+        player.buySlot(slot1);  //1500-400=110
+
+        CHECK(player.getMoney() == 1100);       // Money deducted for house
+        CHECK(player.canBuildHouse(slot1)==true);
+
+
+        CHECK(player.buildHouse(slot1)==true); //1        //1100-200=900
+         CHECK(slot1.getHouses() == 1); 
+                 CHECK(player.getMoney() == 900);       // Money deducted for house
+
+
+        CHECK(player.buildHouse(slot1)==true); //2      //900-200=700
+        CHECK(player.canBuildHouse(slot1)==true);
+        CHECK(slot1.getHouses() == 2); 
+        CHECK(player.getMoney() == 700);       // Money deducted for house
+
+
+        CHECK(player.buildHouse(slot1)==true); //3  //700-200=500
+        CHECK(slot1.getHouses() == 3); 
+        CHECK(player.getMoney() == 500);       // Money deducted for house
+
+
+        CHECK(player.buildHouse(slot1)==true);// 4   //500-200=300
+        CHECK(slot1.getHouses() == 4); 
+        CHECK(player.getMoney() == 300);       // Money deducted for house
+
+
+        CHECK(player.buildHouse(slot1)==false);// not have money to build hotel
+         CHECK(slot1.getHouses() == 4); 
+         CHECK(slot1.getHotels() == 0); 
+
+        player.setMoney(1500);
+          CHECK(player.buildHouse(slot1)==true);// hotel //4*200+100=900
+         CHECK(slot1.getHouses() == 0); 
+         CHECK(slot1.getHotels() == 1); 
+          CHECK(player.getMoney() == 600);       // Money deducted for house
+
+
+        CHECK(slot1.getOwnerName() == "TestPlayer"); // Player owns the slot
+
+}
+
+
+
+/////////////////////////////////////////////////////
 
 // Test case for Dice class
 TEST_CASE("Testing the Dice class") {

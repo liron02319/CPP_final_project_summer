@@ -1,306 +1,546 @@
-#include "Game.hpp"
-#include <SFML/Graphics.hpp> // Include necessary SFML headers
+
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
 #include <vector>
-#include <algorithm> // For std::min
+#include <string>
+#include "Player.hpp"
 #include "Slot.hpp"
+#include "Dice.hpp"
+#include "Button.hpp"
+#include "Menu.hpp"
+#include "Openning.hpp"
+#include "Game.hpp"
 
 
-// function that creates the board based on number of slots pushed into slotList
-void Game::createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::Vector2u windowSize, sf::Font &font)
-{
-    //Method Name: push_back- Purpose: Adds an element to the end of a std::vector.
-    slots.clear();
-    slots.push_back(Slot(0, "GO", CornerColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(1, "Mediterranean Avenue", sf::Color(0x590C38FF), 100, 6, 30, 50, 90));
-    slots.push_back(Slot(2, "Community Chest", CommunityChestColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(3, "Baltic Avenue", sf::Color(0x590C38FF), 100, 6, 30, 50, 90));
-    slots.push_back(Slot(4, "Income Tax", TaxColor, 100, 100, 0, 0, 0));
-    slots.push_back(Slot(5, "Reading Railroad", trainColor, 200, 25, 50, 0, 0));
-    slots.push_back(Slot(6, "Oriental Avenue", sf::Color(0x87A5D7FF), 150, 8, 40, 50, 100));
-    slots.push_back(Slot(7, "Chance", ChanceColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(8, "Vermont Avenue", sf::Color(0x87A5D7FF), 150, 8, 40, 50, 100));
-    slots.push_back(Slot(9, "Connecticut Avenue", sf::Color(0x87A5D7FF), 160, 9, 45, 50, 120));
-    slots.push_back(Slot(10, "Jail", CornerColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(11, "St. Charles Place", sf::Color(0xF8377AFF), 170, 10, 50, 60, 130));
-    slots.push_back(Slot(12, "Electric Company", CompanyColor, 150, 0, 0, 0, 0));
-    slots.push_back(Slot(13, "States Avenue", sf::Color(0xF8377AFF), 170, 10, 50, 60, 130));
-    slots.push_back(Slot(14, "Virginia Avenue", sf::Color(0xF8377AFF), 180, 11, 55, 60, 140));
-    slots.push_back(Slot(15, "Pennsylvania Railroad", trainColor, 200, 25, 50, 0, 0));
-    slots.push_back(Slot(16, "St. James Place", sf::Color(0xF67F23FF), 190, 12, 60, 70, 150));
-    slots.push_back(Slot(17, "Community Chest", CommunityChestColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(18, "Tennessee Avenue", sf::Color(0xF67F23FF), 190, 12, 60, 70, 150));
-    slots.push_back(Slot(19, "New York Avenue", sf::Color(0xF67F23FF), 200, 14, 70, 70, 160));
-    slots.push_back(Slot(20, "Free Parking", CornerColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(21, "Kentucky Avenue", sf::Color(0xEF3B24FF), 220, 18, 90, 80, 170));
-    slots.push_back(Slot(22, "Chance", ChanceColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(23, "Indiana Avenue", sf::Color(0xEF3B24FF), 220, 18, 90, 80, 170));
-    slots.push_back(Slot(24, "Illinois Avenue", sf::Color(0xEF3B24FF), 240, 20, 100, 80, 180));
-    slots.push_back(Slot(25, "B&O Railroad", trainColor, 200, 25, 50, 0, 0));
-    slots.push_back(Slot(26, "Atlantic Avenue", sf::Color(0xFEE703FF), 260, 22, 110, 90, 190));
-    slots.push_back(Slot(27, "Ventnor Avenue", sf::Color(0xFEE703FF), 260, 22, 110, 90, 190));
-    slots.push_back(Slot(28, "Water Works", CompanyColor, 150, 0, 0, 0, 0));
-    slots.push_back(Slot(29, "Marvin Gardens", sf::Color(0xFEE703FF), 280, 24, 120, 90, 200));
-    slots.push_back(Slot(30, "Go to Jail", CornerColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(31, "Pacific Avenue", sf::Color(0x12A65CFF), 300, 26, 130, 100, 210));
-    slots.push_back(Slot(32, "North Carolina Avenue", sf::Color(0x12A65CFF), 300, 26, 130, 100, 210));
-    slots.push_back(Slot(33, "Community Chest", CommunityChestColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(34, "Pennsylvania Avenue", sf::Color(0x12A65CFF), 320, 28, 150, 100, 220));
-    slots.push_back(Slot(35, "Short Line Railroad", trainColor, 200, 25, 50, 0, 0));
-    slots.push_back(Slot(36, "Chance", ChanceColor, 0, 0, 0, 0, 0));
-    slots.push_back(Slot(37, "Park Place", sf::Color(0x284EA1FF), 350, 35, 175, 100, 500));
-    slots.push_back(Slot(38, "Luxury Tax", TaxColor, 100, 100, 0, 0, 0));
-    slots.push_back(Slot(39, "Boardwalk", sf::Color(0x284EA1FF), 400, 50, 200, 100, 600));
 
-    boardsize = slots.size();
+using namespace std;
 
-    int slotsPerSide = (boardsize + 3) / 4; // Calculate number of slots per side (4 sides)
 
-    // Layout the slots on the board
-    //size of the board
-    float xPos, yPos;
-    const float slotWidth = windowSize.y / (slotsPerSide + 1)-10 ;  // Width of each slot (no gaps) change offset by minusing values to reduce size
-    const float slotHeight = windowSize.y / (slotsPerSide + 1)-10; // Height of each slot (no gaps) change offset by minusing values to reduce size
 
-    // Top row
-    for (int i = 0; i < std::min(slotsPerSide, boardsize); i++)
+    Game::Game() 
+    : trainColor(sf::Color(0xCAE8E0FF)),
+      CompanyColor(sf::Color::Cyan),
+      ChanceColor(sf::Color(0xD6292BFF)),
+      CommunityChestColor(sf::Color(0x21418CFF)),
+      TaxColor(sf::Color::Yellow),
+      CornerColor(sf::Color::White)
+
     {
-        xPos = (((windowSize.x) - (slotWidth * slotsPerSide)) / 2) + (i * slotWidth); // Centering the top row
-        yPos = 0;                                                                     // Fixed Y position for top row
-        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);                  // Set sprite position
+     //The call to srand(time(0)); is a function call meant to seed the random number generator, which is not tied to the initialization of any member variable. Therefore, it should stay in the body of the constructor, not in the initializer list.
+    srand(time(0)); // still need to seed the random number generator inside the body
+
     }
 
-    xPos += slotWidth;
-    boardleftmost = xPos + slotWidth -120;
-    boardrightcolend = (((windowSize.x) - (slotWidth * slotsPerSide)) / 2) + slotWidth;
-    boardTopRowBottom = yPos + slotHeight;
-    // Right column
-    for (int i = slotsPerSide; i < std::min(2 * slotsPerSide, boardsize); i++)
-    {
-        xPos = xPos;                                                                                        // Fixed X position for right column
-        yPos = /*((windowSize.y - (slotHeight * slotsPerSide)) / 2) + */ ((i - slotsPerSide) * slotHeight); // Y position changes
-        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);
-    }
-    boardBottomRowTop = yPos;
 
-    yPos += slotHeight;
-    // Bottom row
-    for (int i = 2 * slotsPerSide; i < std::min(3 * slotsPerSide, boardsize); i++)
-    {
-        xPos = (((windowSize.x) - (slotWidth * slotsPerSide)) / 2) + (slotsPerSide * slotWidth) - ((i - 2 * slotsPerSide) * slotWidth); // Centering the bottom row
-        yPos = yPos;                                                                                                                    //(windowSize.y / 2) + (slotHeight);                                                            // Fixed Y position for bottom row
-        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);
-    }
+    /*
 
-    xPos -= slotWidth;
-    // Left column
-    for (int i = 3 * slotsPerSide; i < std::min(4 * slotsPerSide, boardsize); i++)
-    {
-        xPos = xPos;                                                                // Fixed X position for left column
-        yPos = (slotsPerSide * slotHeight) - ((i - 3 * slotsPerSide) * slotHeight); // Y position changes
-        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);
-    }
-}
+    void run() function in the Game class is responsible for running the main game logic, 
+    which includes setting up the game board,
+    loading resources (textures, fonts, etc.), creating players, and handling player turns.
+    */
 
-// handels the processing of each slot players lands on
-void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slot &slot, sf::RenderWindow &window, sf::Text &message, int d1, int d2, int &numplayers)
-{
-    // check if slot is owned by any player
-    if (slot.getIsOwned())
-    {
-        int rent = 0;
-        bool flag = false;
-        // check if slot is railroad
-        if (slot.getColorGroup() == trainColor)
-        {
-            Player *railroadOwner;
-            for (auto &p : players)
-            {
-                if (p.getName() == slot.getOwnerName())
-                {
-                    if (p.getName() == player.getName())
-                    {
-                        flag = true;
-                    }
-                    railroadOwner = &p;
-                }
-            }
-            rent = railroadOwner->railRoadOwned() * 50;
-            if (!flag)
-            {
-                if (player.checkBankruptcy(rent, railroadOwner))
-                {
-                    message.setString(player.getName() + " went bankrupt!\n");
-                }
-                else
-                {
-                    railroadOwner->setMoney(railroadOwner->getMoney() + rent); // Update railroad owner's money
-                    player.setMoney(player.getMoney() - rent); // Deduct rent from the player's money
-                    
-                }
-            }
-        }
-        // check if slot is company
-        else if (slot.getColorGroup() == CompanyColor)
-        {
-            rent = (d1 + d2) * 10;
-            Player *companyowner;
-            for (auto &p : players)
-            {
-                if (p.getName() == slot.getOwnerName())
-                {
-                    if (p.getName() == player.getName())
-                    {
-                        flag = true;
-                    }
-                    companyowner = &p;
-                }
-            }
-            if (!flag)
-            {
-                if (player.checkBankruptcy(rent, companyowner))
-                {
-                    message.setString(player.getName() + " went bankrupt!\n");
-                }
-                else
-                {
-
-                    companyowner->setMoney(companyowner->getMoney() + rent); // Update railroad owner's money
-                    player.setMoney(player.getMoney() - rent); // Deduct rent from the player's money
-                }
-            }
-        }
-        // check if slot is street
-        else
-        {
-            rent = slot.calculateRent();
-            Player *slotOwner;
-            for (auto &p : players)
-            {
-                if (p.getName() == slot.getOwnerName())
-                {
-                    if (p.getName() == player.getName())
-                    {
-                        flag = true;
-                    }
-                    slotOwner = &p;
-                }
-            }
-            if (!flag)
-            {
-                if (player.checkBankruptcy(rent, slotOwner))
-                {
-                    message.setString(player.getName() + " went bankrupt!\n");
-                }
-                else
-                {
-
-                    slotOwner->setMoney(slotOwner->getMoney() + rent); // Update slot owner's money
-                    player.setMoney(player.getMoney() - rent); // Deduct rent from the player's money
-                    
-                }
-            }
-        }
-        if (player.isBankrupt())
-            return;
-        if (flag)
-        {
-            std::cout << player.getName() << " owns " << slot.getName() << std::endl;
-            message.setString(player.getName() + " owns " + slot.getName());
-            return;
-        }
-        std::cout << player.getName() << " pays $" << rent << " rent to the owner of " << slot.getName() << std::endl;
-        message.setString(player.getName() + " pays $" + std::to_string(rent) + " rent to the owner of " + slot.getName());
-    }
-    else
+    void Game::run()
     {
 
-        // Create Yes and No buttons
-        Button yesButton(50, 500, 100, 50, "Yes");
-        Button noButton(250, 500, 100, 50, "No");
+          // Get the desktop resolution for fullscreen mode
+        sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+        sf::RenderWindow window(desktopMode, "Monopoly Card Actions", sf::Style::Default);
 
-        // Create the message asking if the player wants to buy the slot
+         Openning openning;
+        openning.displayOpening(window); // Display the opening window
+
+
+        // loading textures for board, slots and player(tokens)
+        sf::Texture Board_Text, player_texure, slot_texture;
+        Board_Text.loadFromFile("images/Game_board.jpg");
+        player_texure.loadFromFile("images/tokens.png");
+        slot_texture.loadFromFile("images/Game_board.jpg");
+
+        // apply texture to board
+        sf::Sprite Board_Sprite;
+        Board_Sprite.setTexture(Board_Text);
+
+        // Get the desktop resolution for fullscreen mode
+       // sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+      //  sf::RenderWindow window(desktopMode, "Monopoly Card Actions", sf::Style::Default);
+
+        // Get the size of the window and the board texture
+        sf::Vector2u windowSize = window.getSize();
+        sf::Vector2u boardTextureSize = Board_Text.getSize();
+
+
+       
+        /*
+        The board's texture is scaled to fit the window.
+        The scaling factor is calculated based on the ratio of the window size to the texture size. 
+        This ensures that the board maintains its aspect ratio, even when resized
+        */
+        // Calculate scale factors for both width and height and apply the scale to board
+        float scaleX = static_cast<float>(windowSize.x) / boardTextureSize.x;
+        float scaleY = static_cast<float>(windowSize.y) / boardTextureSize.y;
+        float scaleFactor = min(scaleX, scaleY);
+        Board_Sprite.setScale(scaleFactor, scaleFactor);
+        sf::FloatRect boardBounds = Board_Sprite.getGlobalBounds(); // Get the size of the scaled board
+
+
+        //After scaling, the board is centered within the window.
+        // Calculate position to center the board in the window
+        float xPos = (windowSize.x - boardBounds.width) / 2;
+        float yPos = (windowSize.y - boardBounds.height) / 2;
+
+        // Set the sprite position to center it
+        Board_Sprite.setPosition(xPos, yPos);
+
+
+
+        // Create slots
         sf::Font font;
-        if (!font.loadFromFile("Fonts/bebas/Bebas-Regular.ttf"))
+        font.loadFromFile("Fonts/bebas/Bebas-Regular.ttf");
+        std::vector<Slot> slots;
+        createslot(slots, slot_texture, windowSize, font);
+
+        // Create players
+        std::vector<Player> players;
+        int doubleCounter = 3; // max double rolls in a row
+        int playersLeft = 0;   // number of players left in game
+        Player *winner;        // points to winner
+
+        // Get names and num of players playing and set the names for player
+        int numPlayer = 4;
+        Menu menu;
+        std::vector<std::string> name_list = menu.loadMenu(numPlayer, window);
+        if (numPlayer == 0)
+            return;
+
+        for (int i = 0; i < numPlayer; i++)
         {
-            std::cerr << "Error loading font\n";
+            players.push_back(Player(name_list[i], i, slots, slots[0]));
         }
 
-        sf::Text buyPrompt;
-        buyPrompt.setFont(font);
-        buyPrompt.setString("Do you want to buy " + slot.getName() + " for $" + std::to_string(slot.getPrice()) + "?");
-        buyPrompt.setCharacterSize(24);
-        buyPrompt.setFillColor(sf::Color::White);
-        buyPrompt.setPosition(50, 450); // Adjust position as needed
+        // Set each player's sprite with a token from the sprite sheet
 
-        sf::RectangleShape background;
-        background.setSize(sf::Vector2f(10 + buyPrompt.getGlobalBounds().width, 10 + buyPrompt.getGlobalBounds().height));
-        background.setPosition(45, 445);
-        background.setFillColor(sf::Color(70, 120, 60));
-
-        bool decisionMade = false;
-        bool wantsToBuy = false; // Keep track of player's decision
-
-        while (!decisionMade && window.isOpen())
+        for (std::vector<Player>::size_type  i = 0; i < players.size(); i++)
         {
-            sf::Event event;
-            while (window.pollEvent(event))
+            players[i].setTexture(player_texure, slots[0].getSlotShape().getGlobalBounds().width); // Set texture with token index i
+            players[i].setPos(slots[0].getSlotShape().getPosition().x, slots[0].getSlotShape().getPosition().y);
+        }
+
+        int currTurn = 0;
+
+        // Text that shows player info
+        sf::Font PlayerInfoFont;
+        PlayerInfoFont.loadFromFile("Fonts/bebas/Bebas-Regular.ttf");
+
+        std::vector<sf::Text> PlayerInfoText;
+        // One Text object for one player
+        for (int i = 0; i < numPlayer; i++)
+        {
+            PlayerInfoText.push_back(sf::Text());
+        }
+        // Initialize the Text
+        for (std::vector<sf::Text>::size_type  i = 0; i < PlayerInfoText.size(); i++)
+        {
+            PlayerInfoText[i].setFont(PlayerInfoFont);
+            PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+            PlayerInfoText[i].setFillColor(sf::Color::White);
+            PlayerInfoText[i].setCharacterSize(25);
+            PlayerInfoText[i].setPosition(boardleftmost + 10, (i * 60)); //size of names and money right side
+        }
+        // Set color of player name who is currently rolling the dice to yellow and brightens the token color
+        PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+        players[currTurn].setActive();
+
+        std::vector<Dice> d;
+        // create two die
+        for (int i = 0; i < 2; i++)
+        {
+            d.push_back(Dice());
+        }
+        for (std::vector<Dice>::size_type i = 0; i < d.size(); i++)
+        {
+            d[i].roll();
+        }
+        d[0].setPos(20, 60);
+        d[1].setPos(82, 60);
+
+        Button button(10, 122, 134, 50, "Roll");       // Crete button for rolling the dice
+        Button buttonBuild(10, 190, 134, 50, "Build"); // Crete button for building huse/hotel
+
+        // create clock for timing message shown of chance
+        sf::Clock gameClock;
+        sf::Time deltaTime;
+        float elapsedTimechance = 2.0f, elapsedTimeSlot = 2.0f;
+
+        // create message that shows on chance card
+        sf::Text MessageChance, MessageSlot;
+        MessageChance.setFont(PlayerInfoFont);
+        MessageChance.setPosition(boardrightcolend + 10, boardTopRowBottom + 10);
+        MessageChance.setCharacterSize(24);
+        MessageChance.setFillColor(sf::Color::White);
+        MessageChance.setString("");
+
+        // create message that shows on slot action
+        MessageSlot.setFont(PlayerInfoFont);
+        MessageSlot.setPosition(boardrightcolend + 10, boardBottomRowTop - 10);
+        MessageSlot.setCharacterSize(24);
+        MessageSlot.setFillColor(sf::Color::White);
+        MessageSlot.setString("");
+
+        // create ge out of jail card
+        sf::RectangleShape GOOJ;
+        GOOJ.setFillColor(sf::Color::Magenta);
+        GOOJ.setOutlineThickness(1);
+        GOOJ.setOutlineColor(sf::Color::Black);
+        GOOJ.setSize(sf::Vector2f(10, 10));
+
+        while (window.isOpen())
+        {
+            deltaTime = gameClock.restart();
+            elapsedTimeSlot += deltaTime.asSeconds();
+            elapsedTimechance += deltaTime.asSeconds();
+            sf::Event eve;
+            while (window.pollEvent(eve))
             {
-                if (event.type == sf::Event::Closed)
+                if (eve.type == sf::Event::Closed) // If cross/close is clicked/pressed
+                    window.close();                // close the game
+                if (eve.type == sf::Event::KeyPressed)
                 {
+                    elapsedTimechance = 0;
+                    // All the functionality is mapped to key F1 - F12  and 1 - 4 sort of like developer codes
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
+                        advanceToGo(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2))
+                        bankDividend(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F3))
+                        goBack3Spaces(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F4))
+                        goToJail(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5))
+                        makeRepairs(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F6))
+                        payPoorTax(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F7))
+                        tripToReadingRailroad(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F8))
+                        walkToBoardwalk(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F9))
+                        electedChairman(players[currTurn], players, MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
+                        buildingLoanMatures(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11))
+                        getOutOfJailFree(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F12))
+                        advanceToIllinoisAve(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+                        advanceToStCharlesPlace(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+                        streetRepairs(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+                        advanceToNearestUtility(players[currTurn], MessageChance);
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+                        advanceToNearestRailroad(players[currTurn], MessageChance);
+                    else
+                        elapsedTimechance += 2;
+
+                    // Gives turn to next player and changes colour of text and token accordingly
+                    PlayerInfoText[currTurn].setFillColor(sf::Color::White);
+                    players[currTurn].setInActive();
+                    CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                    gameClock.restart();
+                    for (int i = 0; i < numPlayer; i++)
+                        PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                    PlayerInfoText[currTurn].setString(players[currTurn].getName() + "\n$" + to_string(players[currTurn].getMoney()));
+                    currTurn = (currTurn + 1) % numPlayer;
+                    while (players[currTurn].isBankrupt())
+                        currTurn = (currTurn + 1) % numPlayer;
+                    PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+                    players[currTurn].setActive();
+                }
+                // Check if button is clicked
+                if (button.isClicked(sf::Mouse::getPosition(window), eve))
+                {
+                    // Handle jail logic
+                    if (players[currTurn].isInJail())
+                    {
+                        if (players[currTurn].getTurnsInJail() < 3)
+                        {
+                            // Roll the dice
+                            d[0].roll();
+                            d[1].roll();
+                            for (int i = 0; i < 2; i++)
+                                d[i].draw(window);
+                            bool rolledDouble = (d[0].getCurrFace() == d[1].getCurrFace());
+
+                            // Attempt to get out of jail
+                            players[currTurn].attemptToGetOut(rolledDouble, window);
+
+                            if (!players[currTurn].isInJail())
+                            {
+                                // Player is out of jail
+                                MessageSlot.setString(players[currTurn].getName() + " is out of jail!");
+                                elapsedTimeSlot = 0;
+
+                                players[currTurn].move_slot(d[1].getCurrFace() + d[0].getCurrFace(), boardsize);
+
+                                PlayerInfoText[currTurn].setFillColor(sf::Color::White);
+                                players[currTurn].setInActive();
+                                CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                                currTurn = (currTurn + 1) % numPlayer;
+                                while (players[currTurn].isBankrupt())
+                                    currTurn = (currTurn + 1) % numPlayer;
+                                gameClock.restart();
+                                for (int i = 0; i < numPlayer; i++)
+                                    PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                                PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+                                players[currTurn].setActive();
+
+                                gameClock.restart();
+                            }
+                            else
+                            {
+                                std::cout << "Turn injail\n";
+                                players[currTurn].incrementTurnsInJail();
+
+                                PlayerInfoText[currTurn].setFillColor(sf::Color::White);
+                                players[currTurn].setInActive();
+                                currTurn = (currTurn + 1) % numPlayer;
+                                while (players[currTurn].isBankrupt())
+                                    currTurn = (currTurn + 1) % numPlayer;
+                                CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                                gameClock.restart();
+                                for (int i = 0; i < numPlayer; i++)
+                                    PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                                PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+                                players[currTurn].setActive();
+                            }
+                        }
+                        else
+                        {
+                            // Player has spent 3 turns in jail
+                            // Roll the dice
+                            d[0].roll();
+                            d[1].roll();
+                            players[currTurn].payFine();
+                            players[currTurn].move_slot(d[0].getCurrFace() + d[1].getCurrFace(), boardsize);
+
+                            MessageSlot.setString(players[currTurn].getName() + " has paid a fine of NIS 50 to get out of jail!");
+                            elapsedTimeSlot = 0;
+
+                            PlayerInfoText[currTurn].setFillColor(sf::Color::White);
+                            players[currTurn].setInActive();
+                            currTurn = (currTurn + 1) % numPlayer;
+                            while (players[currTurn].isBankrupt())
+                                currTurn = (currTurn + 1) % numPlayer;
+                            CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                            gameClock.restart();
+                            for (int i = 0; i < numPlayer; i++)
+                                PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                            PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+                            players[currTurn].setActive();
+
+                            gameClock.restart();
+                        }
+                    }
+                    else
+                    {
+                        // roll the die and add the result, then call move slot to move the player respective places
+                        d[0].roll();
+                        d[1].roll();
+
+                        for (int i = 0; i < 2; i++)
+                            d[i].draw(window);
+                        // if (d[0].currFace != d[1].currFace)
+                        players[currTurn].move_slot(d[0].getCurrFace() + d[1].getCurrFace(), boardsize);
+                        // Gives turn to next player and changes colour of text and token accordingly
+                        PlayerInfoText[currTurn].setFillColor(sf::Color::White);
+                        players[currTurn].setInActive();
+                        PlayerInfoText[currTurn].setString(players[currTurn].getName() + "\n$" + to_string(players[currTurn].getMoney()));
+                        CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                        gameClock.restart();
+                        for (int i = 0; i < numPlayer; i++)
+                            PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                        if (d[0].getCurrFace() != d[1].getCurrFace())
+                        {
+                            currTurn = (currTurn + 1) % numPlayer;
+                            doubleCounter = 3;
+                        }
+                        while (players[currTurn].isBankrupt())
+                            currTurn = (currTurn + 1) % numPlayer;
+                        if (d[0].getCurrFace() == d[1].getCurrFace())
+                            doubleCounter--;
+                        if (doubleCounter == 0)
+                        {
+                            goToJail(players[currTurn], MessageChance);
+                            currTurn = (currTurn + 1) % numPlayer;
+                            while (players[currTurn].isBankrupt())
+                                currTurn = (currTurn + 1) % numPlayer;
+                            doubleCounter = 3;
+                        }
+                        PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
+                        players[currTurn].setActive();
+                    }
+                }
+                if (buttonBuild.isClicked(sf::Mouse::getPosition(window), eve))
+                {
+                    players[currTurn].buildHouse(*(players[currTurn].getCurrSlot()));
+                    for (int i = 0; i < numPlayer; i++)
+                        PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                }
+            }
+            // check if more than one player remain
+            playersLeft = 0;
+            for (int i = 0; i < numPlayer; i++)
+            {
+                if (players[i].isBankrupt() == false)
+                {
+                    playersLeft++;
+                    winner = &players[i];
+                }
+            }
+            if (playersLeft == 1)
+            {
+                break;
+            }
+            // checks if one player has more than 4000 money
+            bool moremoney = false;
+            for (int i = 0; i < numPlayer; i++)
+            {
+                if (players[i].getMoney() >= 4000)
+                {
+                    moremoney = true;
+                    winner = &players[i];
+                    break;
+                }
+            }
+            if (moremoney)
+                break;
+
+            button.update(sf::Mouse::getPosition(window));
+            buttonBuild.update(sf::Mouse::getPosition(window));
+
+            window.clear(sf::Color(70, 120, 60)); // create a background color with RGB values
+            // window.draw(Board_Sprite);            // draw board
+            for (int i = 0; i < boardsize; i++)
+            {
+                // window.draw(slots[i].slot); // draw slots
+                slots[i].draw(window);
+            }
+            for (std::vector<Player>::size_type  i = 0; i < players.size(); i++)
+            {
+                players[i].draw(window); // draw each player in start
+            }
+            for (std::vector<Dice>::size_type  i = 0; i < d.size(); i++)
+            {
+                d[i].draw(window); // draw dice
+            }
+
+            for (std::vector<sf::Text>::size_type  i = 0; i < PlayerInfoText.size(); i++)
+            {
+                window.draw(PlayerInfoText[i]); // draw name+money text indicating player info
+                float x = players[i].getSprite().getPosition().x;
+                float y = players[i].getSprite().getPosition().y;
+                players[i].getSprite().setPosition(PlayerInfoText[i].getGlobalBounds().width + PlayerInfoText[i].getPosition().x, PlayerInfoText[i].getPosition().y);
+                players[i].draw(window); //show token neer money
+                if (players[i].getIsJailable() == false)
+                {
+                    GOOJ.setPosition(players[i].getSprite().getPosition().x, players[i].getSprite().getPosition().y);
+                    window.draw(GOOJ);
+                }
+                for (std::vector<Slot*>::size_type j = 0; j < players[i].getOwnedSlots().size(); j++)
+                {
+                    float width, height, xposition, yposition;
+                    width = players[i].getOwnedSlots()[j]->getSlotShape().getGlobalBounds().width;
+                    height = players[i].getOwnedSlots()[j]->getSlotShape().getGlobalBounds().height;
+                    xposition = players[i].getOwnedSlots()[j]->getSlotShape().getPosition().x;
+                    yposition = players[i].getOwnedSlots()[j]->getSlotShape().getPosition().y;
+                    players[i].getOwnedSlots()[j]->setSizeAll(PlayerInfoText[i].getGlobalBounds().height, PlayerInfoText[i].getGlobalBounds().height);
+                    players[i].getOwnedSlots()[j]->setPos(players[i].getSprite().getPosition().x + players[i].getSprite().getGlobalBounds().width + (j * players[i].getOwnedSlots()[j]->getSlotShape().getGlobalBounds().height / 3), players[i].getSprite().getPosition().y);
+                    players[i].getOwnedSlots()[j]->draw(window);// show the slots neer money
+                    players[i].getOwnedSlots()[j]->setSizeAll(width - 4, height - 4); // 4 for outline offset
+                    players[i].getOwnedSlots()[j]->setPos(xposition, yposition);
+                }
+                players[i].getSprite().setPosition(x, y);
+            }
+
+            button.draw(window);      // Draw button
+            buttonBuild.draw(window); // Draw button
+
+            if (elapsedTimechance < 2)
+                window.draw(MessageChance);
+            if (elapsedTimeSlot < 2)
+                window.draw(MessageSlot);
+            window.display();
+        }
+
+        // create winner text
+        sf::Text WinnerText;
+        WinnerText.setFont(font);
+        WinnerText.setString(winner->getName() + " Won!!");
+        WinnerText.setCharacterSize(64);
+        WinnerText.setFillColor(sf::Color::White);
+        WinnerText.setPosition((windowSize.x - WinnerText.getGlobalBounds().width) / 2, 50);
+
+        // winner window display
+        while (window.isOpen())
+        {
+            sf::Event eve;
+            while (window.pollEvent(eve))
+            {
+                if (eve.type == sf::Event::Closed) // If cross/close is clicked/pressed
                     window.close();
-                }
-
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-                // Update and draw buttons
-                yesButton.update(mousePos);
-                noButton.update(mousePos);
-
-                // window.clear();
-                window.draw(background);
-
-                // Draw the buy prompt message
-                window.draw(buyPrompt);
-
-                // Draw the buttons
-                yesButton.draw(window);
-                noButton.draw(window);
-
-                window.display();
-
-                // Check for clicks
-                if (yesButton.isClicked(mousePos, event))
-                {
-                    wantsToBuy = true;
-                    decisionMade = true;
-                }
-                else if (noButton.isClicked(mousePos, event))
-                {
-                    wantsToBuy = false;
-                    decisionMade = true;
-                }
             }
+            window.clear(sf::Color(70, 120, 60)); // create a background color with RGB values
+            window.draw(WinnerText);
+            window.display();
         }
+    }
 
-        if (wantsToBuy)
+    void Game::CasesForHandlingSlot(Player &player, std::vector<Player> &players, sf::Text &MessageChance, sf::Text &MessageSlot, float &elapsedTimeSlot, float &elapsedTimechance, sf::RenderWindow &window, std::vector<Dice> &d, int &numplayers)
+    {
+        // check if current slot is chance or community chest(surprise)
+        if (player.getCurrSlot()->getColorGroup() == ChanceColor || player.getCurrSlot()->getColorGroup() == CommunityChestColor)
         {
-            if (player.buySlot(slot))
-            {
-                slot.setIsOwned(true);
-                std::cout << player.getName() << " bought " << slot.getName() << " for $" << slot.getPrice() << std::endl;
-                message.setString(player.getName() + " bought " + slot.getName()  + " for $" + std::to_string(slot.getPrice()));
-                std::cout << &slot << std::endl;
-            }
-            else
-            {
-                std::cout << player.getName() << " cannot buy " << slot.getName()  << std::endl;
-                message.setString(player.getName() + " cannot buy " + slot.getName() );
-            }
+            Chance_CommunityChest(player, MessageChance, players);
+            MessageSlot.setString(player.getName() + " landed on chance/communitychest");
+            elapsedTimeSlot = 0;
+            elapsedTimechance = 0;
+        }
+        // check if current slot is a street that can be bought
+        if (player.getCurrSlot()->getColorGroup() != CornerColor && player.getCurrSlot()->getColorGroup() != TaxColor && player.getCurrSlot()->getColorGroup() != ChanceColor && player.getCurrSlot()->getColorGroup() != CommunityChestColor)
+        {
+            handleLandingOnSlot(player, players, *(player.getCurrSlot()), window, MessageSlot, d[0].getCurrFace(), d[1].getCurrFace(), numplayers);
+            elapsedTimeSlot = 0;
+        }
+        // check if player is on taxable slot
+        else if (player.getCurrSlot()->getColorGroup() == TaxColor)
+        {
+            collectTax(player, MessageSlot, numplayers, players);
+            elapsedTimeSlot = 0;
+        }
+        // check if player is on go to jail slot
+        else if (player.getCurrSlot()->getColorGroup() == CornerColor && player.getCurrSlot()->getName() == "Go to Jail")
+        {
+            goToJail(player, MessageSlot);
+            elapsedTimeSlot = 0;
+        }
+    }
+
+    void Game::collectTax(Player &player, sf::Text &message, int &numPlayers, std::vector<Player> &players)
+    {
+        // checks if player can pay for tax
+        if (player.checkBankruptcy(player.getCurrSlot()->getRent()))
+        {
+            message.setString(player.getName() + " went bankrupt!\n");
         }
         else
         {
-            std::cout << player.getName() << " decided not to buy " << slot.getName()  << std::endl;
-            message.setString(player.getName() + " decided not to buy " + slot.getName() );
+
+            player.setMoney(player.getMoney() - player.getCurrSlot()->getRent());
+            std::cout << player.getName() << " paid tax of " << player.getCurrSlot()->getRent() << ".\n";
+            message.setString(player.getName() + " paid tax of " + std::to_string(player.getCurrSlot()->getRent()) + ".\n");
         }
     }
-}
+
+  

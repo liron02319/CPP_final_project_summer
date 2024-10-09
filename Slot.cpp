@@ -51,6 +51,12 @@
         slotHouse.setFillColor(sf::Color::Green);
         slotHouse.setOutlineThickness(2);
         slotHouse.setOutlineColor(sf::Color::Black);
+
+         if(this->getColorGroup() == sf::Color(0xCAE8E0FF)) 
+         {
+               this->setIsRail(true);
+                        } 
+
     }
 
 

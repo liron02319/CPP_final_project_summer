@@ -80,6 +80,7 @@
                 money -= hotelPrice; // Deduct the hotel price.
                 slot.setHotels(1);   // Set the number of hotels to 1.
                 slot.setHouses(0);   // Reset the number of houses to 0, as it is now a hotel.
+                
                 std::cout << "Hotel built, house count reset to 0, hotel count: " << slot.getHotels() << std::endl;
                 return true;  // Successfully built a hotel.
             }
@@ -167,8 +168,13 @@ The railRoadOwned() function is designed to count
         int i = 0;
         for (size_t j = 0; j < ownedSlots.size(); j++)
         {
+            //  std::cout << "ownedSlots[j]:" <<  ownedSlots[j] <<  std::endl;
+
             if (ownedSlots[j]->getIsRail())
+            {
                 i++;
+            }
+
         }
         return i;
     }

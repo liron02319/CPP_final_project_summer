@@ -3,11 +3,12 @@ CXX = g++                 # Compiler
 CXXFLAGS = -c -Wall -std=c++11  # Compilation flags
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system  # SFML libraries
 TARGET = MonopolyGame         # Output executable name
-SRC = Main.cpp Button.cpp Menu.cpp Dice.cpp Slot.cpp Player.cpp Openning.cpp # Source files
+
+SRC = Main.cpp Button.cpp Menu.cpp Dice.cpp Slot.cpp Player.cpp Openning.cpp Game.cpp CreateSlot.cpp # Source files
 OBJ = $(SRC:.cpp=.o)       # Object files generated from source files
 
 # Object files for core functionalities
-CODE_S = Dice.cpp Slot.cpp Player.cpp 
+CODE_S = Dice.cpp Slot.cpp Player.cpp Button.cpp
 CODE_OBJECTS=$(CODE_S:.cpp=.o)  
 
 # Test source files
@@ -19,8 +20,8 @@ TEST_TARGET = test                   # Test executable name
 all: $(TARGET)
 
 # Updated target for the test executable
-$(TEST_TARGET): $(CODE_OBJECTS) $(TEST_OBJ) Button.o
-	$(CXX) $(CODE_OBJECTS) $(TEST_OBJ) Button.o -o $(TEST_TARGET) -lstdc++ -lm $(LDFLAGS)
+$(TEST_TARGET): $(CODE_OBJECTS) $(TEST_OBJ) 
+	$(CXX) $(CODE_OBJECTS) $(TEST_OBJ) -o $(TEST_TARGET) -lstdc++ -lm $(LDFLAGS)
 
 # Rule to create the executable by linking object files
 $(TARGET): $(OBJ)
@@ -32,7 +33,7 @@ $(TARGET): $(OBJ)
 
 # Clean up object files and the executable
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_OBJ) $(TEST_TARGET) Button.o
+	rm -f $(OBJ) $(TARGET) $(TEST_OBJ) $(TEST_TARGET) Button.o Chance_handling.o
 
 # Phony targets (targets that aren't actual files)
 .PHONY: all clean

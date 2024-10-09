@@ -1,3 +1,7 @@
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
+
 #include <SFML/Graphics.hpp>
 #include "Slot.hpp"
 #include "Button.hpp"
@@ -194,4 +198,8 @@ void incrementTurnsInJail();
     Slot* getCurrSlot() const; 
 
 
+bool hasCompleteSet(Slot &slot) ;
+int getMinHouseCountInSet(Slot &slot);
 };
+
+#endif // PLAYER_HPP

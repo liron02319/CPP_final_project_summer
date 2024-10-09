@@ -1,5 +1,6 @@
-#include "Game.cpp"
+#include "Game.hpp"
 #include "Chance_handling.cpp"
+#include "Menu.hpp"
 
 using namespace std;
 

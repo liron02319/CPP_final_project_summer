@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Button.hpp"
+#include "Game.hpp"
+
 
 
 /*
