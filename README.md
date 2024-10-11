@@ -134,6 +134,10 @@ will pop up the player the choice YES/NO
  Menu.cpp
  Main.cpp
  Game.cpp
+ CreateSlot.cpp
+ Chance_handling.cpp
+  
+  
  
   
 </pre>
