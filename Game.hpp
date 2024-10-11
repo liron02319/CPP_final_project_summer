@@ -55,6 +55,7 @@ public:
     void collectTax(Player &player, sf::Text &message, int &numPlayers, std::vector<Player> &players);
 
     void advanceToGo(Player &player, sf::Text &message);
+
     void bankDividend(Player &player, sf::Text &message);
     void goBack3Spaces(Player &player, sf::Text &message);
     void goToJail(Player &player, sf::Text &message);
@@ -73,7 +74,11 @@ public:
 
     void Chance_CommunityChest(Player &player, sf::Text &MessageChance, std::vector<Player> &players);
     void handleLandingOnSlot(Player &player, std::vector<Player> &players, Slot &slot, sf::RenderWindow &window, sf::Text &message, int d1, int d2, int &numplayers);
-    void createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::Vector2u windowSize, sf::Font &font);
+    void createslot(std::vector<Slot> &slots, sf::Vector2u windowSize, sf::Font &font);
+
+
+    
+
 };
 
 #endif // GAME_HPP

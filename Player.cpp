@@ -109,6 +109,8 @@
     if (!slot.getIsOwned() || slot.getOwnerName() != name) {
         return false;  // Player does not own this slot
     }
+
+
          //   std::cout << "ENTER canBuildHouse" << std::endl;
 
     // Step 2: Collect all slots that belong to the same color group
@@ -198,8 +200,8 @@ The railRoadOwned() function is designed to count
     void Player::attemptToGetOut(bool rolledDouble, sf::RenderWindow &window)
     {
 
-        if(turnsInJail<=3)
-        {
+    if(turnsInJail<3)
+    {
             
         bool canUseMoney = true; //This flag is initially set to true, indicating that the player can use money to get out unless specified otherwise later in the method.
 
@@ -294,14 +296,16 @@ The railRoadOwned() function is designed to count
             {
                 canUseMoney = true;
             }
-        }
+        }//END if the player have a card "get out of jail(GOOJ)"
+
+
 
 
         if (canUseMoney) //he need to pay money to out of jail
         {
             // Create Yes and No buttons
-            Button yesButton(50, 700, 100, 50, "Yes");
-            Button noButton(250, 700, 100, 50, "No");
+            Button yesButton(50, 500, 100, 50, "Yes");
+            Button noButton(250, 500, 100, 50, "No");
 
             // Create the message asking if the player wants to buy the slot
             sf::Font font;
@@ -402,7 +406,7 @@ The railRoadOwned() function is designed to count
     */
     bool Player::checkBankruptcy(int amountOwed, Player* creditor )
     {
-        if (money < amountOwed)
+        if (money < amountOwed) //if you got not enough money 
         {
             // Player is bankrupt
             if (creditor)
@@ -459,7 +463,7 @@ The railRoadOwned() function is designed to count
         setPos(currSlot->getSlotShape().getPosition().x, currSlot->getSlotShape().getPosition().y); // Update graphical position
 
         // Debugging output
-        std::cout << "Moving from " << previousPosition << " to " << position << std::endl;
+        std::cout << this->getName() << " Moving from " << previousPosition << " to " << position << std::endl;
         std::cout << "Current Slot Number: " << currSlot->getSlotNum() << std::endl;
         std::cout << "Total Slots: " << boardsize << std::endl;
         /*

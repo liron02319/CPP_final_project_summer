@@ -305,6 +305,7 @@
         }
         else
         {
+                
             return rentWithHouse * (std::pow(2, houses - 1)); // Rent increases 2x for each additional house
         }
     }

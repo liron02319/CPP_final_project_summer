@@ -6,6 +6,7 @@
 // function for assigning chance when player lands on a surprise slot
 void Game::Chance_CommunityChest(Player &player, sf::Text &MessageChance, std::vector<Player> &players)
 {
+
     int random_outcome = rand() % 16; // can give any outcome of the 16
     if (random_outcome == 0)
         advanceToGo(player, MessageChance);
@@ -64,6 +65,7 @@ void Game::advanceToGo(Player &player, sf::Text &message)
     message.setString(player.getName() + " advanced to Go and collected $200.\n");
 }
 
+
 // collect bank dividend
 void Game::bankDividend(Player &player, sf::Text &message)
 {
@@ -75,12 +77,21 @@ void Game::bankDividend(Player &player, sf::Text &message)
 // go back 3 space
 void Game::goBack3Spaces(Player &player, sf::Text &message)
 {
-    player.setPosition(player.getPosition() - 3 );
-    if (player.getPosition() < 0)
-        player.setPosition(player.getPosition() + boardsize ); // to even move before go
-    int money = player.getMoney();
-    player.move_slot(0, boardsize);
-    player.setMoney(money);
+    int newPosition = player.getPosition() - 3;
+
+    // If the new position is negative, wrap around to the end of the board
+    if (newPosition < 0)
+    {
+        newPosition += boardsize; // Wrap around if necessary
+    }
+
+    player.setPosition(newPosition);
+
+    // After moving back, handle any slot logic, rent, etc.
+  //  int money = player.getMoney();
+    player.move_slot(0, boardsize); // Move slot for this player
+ //   player.setMoney(money);
+
     std::cout << player.getName() << " went back 3 spaces.\n";
     message.setString(player.getName() + " went back 3 spaces.\n");
 }
@@ -88,14 +99,15 @@ void Game::goBack3Spaces(Player &player, sf::Text &message)
 // goes to jail without getting money
 void Game::goToJail(Player &player, sf::Text &message)
 {
-    int money = player.getMoney();
+  //  int money = player.getMoney();
     player.move_slot(1, boardsize);
     while (player.getCurrSlot()->getName() != "Jail")
     {
         player.move_slot(1, boardsize);
     }
-    player.setMoney(money); 
     player.setInJail(true);
+ //   player.setMoney(money); 
+  //  player.setInJail(true);
     std::cout << player.getName() << " went directly to Jail!\n";
     message.setString(player.getName() + " went directly to Jail!\n");
 }

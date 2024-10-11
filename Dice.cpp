@@ -31,6 +31,11 @@ displaying its current face, and positioning it on the screen using the SFML lib
     }
 
     // Roll the die: Randomly changes the current face of the die
+    /*
+         sf::Texture: Stores the image data.
+        sf::Sprite: Displays the texture and allows manipulation (e.g., scaling, rotation).
+    */
+    
     void Dice::roll()
     {
         int num = rand() % 6; // Generate a random number from 0 to 5

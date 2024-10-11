@@ -96,6 +96,11 @@ If the button is clicked, it changes the button's color to activeColor and retur
     void setActiveColor(const sf::Color& color);
     
 
+
+
+
+  
+
 };
 
 #endif // BUTTON_HPP

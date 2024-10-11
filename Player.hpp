@@ -200,6 +200,9 @@ void incrementTurnsInJail();
 
 bool hasCompleteSet(Slot &slot) ;
 int getMinHouseCountInSet(Slot &slot);
+
+
+
 };
 
 #endif // PLAYER_HPP

@@ -4,7 +4,7 @@ CXXFLAGS = -c -Wall -std=c++11  # Compilation flags
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system  # SFML libraries
 TARGET = MonopolyGame         # Output executable name
 
-SRC = Main.cpp Button.cpp Menu.cpp Dice.cpp Slot.cpp Player.cpp Openning.cpp Game.cpp CreateSlot.cpp # Source files
+SRC = Main.cpp Button.cpp Menu.cpp Dice.cpp Slot.cpp Player.cpp Openning.cpp Game.cpp CreateSlot.cpp  # Source files
 OBJ = $(SRC:.cpp=.o)       # Object files generated from source files
 
 # Object files for core functionalities

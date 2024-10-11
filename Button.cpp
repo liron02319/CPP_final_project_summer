@@ -19,6 +19,7 @@ Defines the default colors for different button states (normal, hover, active).
             std::cerr << "Error loading font\n";
         }
 
+
         // Set text properties
         text.setFont(font);
         text.setString(buttonText);
@@ -37,6 +38,7 @@ Defines the default colors for different button states (normal, hover, active).
         shape.setFillColor(normalColor);
 
         isHovered = false;
+
     }
 
 /*
@@ -111,3 +113,9 @@ void Button::setActiveColor(const sf::Color& color) {
     activeColor = color;
 }
 
+
+
+  
+
+
+   

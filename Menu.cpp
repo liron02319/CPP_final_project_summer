@@ -145,6 +145,7 @@ Returns: A vector of strings containing the names of the players.
                     // Check if submit button is clicked
                     if (button.isClicked(sf::Mouse::getPosition(window), eve) && !inputString.empty())
                     {
+                        //convert string to int
                         // check if input of user is between 2-8 players
                         if (std::stoi(inputString) >= 2 && std::stoi(inputString) <= 8)
                         {
@@ -206,5 +207,8 @@ Returns: A vector of strings containing the names of the players.
             button.draw(window);
             window.display();
         }
+     for (size_t i = 0; i < names.size(); ++i) {
+        std::cout << "[" << i << "] " << names[i] << std::endl;
+    }
         return names;
     }

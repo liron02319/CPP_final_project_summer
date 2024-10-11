@@ -6,7 +6,24 @@
 
 
 // function that creates the board based on number of slots pushed into slotList
-void Game::createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::Vector2u windowSize, sf::Font &font)
+/*
+slots: A vector that will store the Slot objects.
+windowSize: The size of the game window.
+font: A font object for rendering slot labels.
+
+
+What the Function Does:
+
+    It first clears the slots vector and then pushes back 40 Slot objects, each representing a different space on the Monopoly board (like "GO", "Baltic Avenue", "Community Chest", etc.).
+    After creating all slots, the function calculates the layout for these slots on the board, dividing them across the four sides of the board (top, right, bottom, left).
+    It sets the position of each slot on the screen (X and Y coordinates) using setSprite(), which aligns them visually on the board.
+
+Slot Layout Logic:
+
+    The function calculates the number of slots per side (slotsPerSide) and uses this value to position the slots along the four sides of the board (top row, right column, bottom row, left column).
+    It dynamically adjusts the slot size and spacing based on the window size.
+*/
+void Game::createslot(std::vector<Slot> &slots, sf::Vector2u windowSize, sf::Font &font)
 {
     //Method Name: push_back- Purpose: Adds an element to the end of a std::vector.
     slots.clear();
@@ -51,11 +68,14 @@ void Game::createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::V
     slots.push_back(Slot(38, "Luxury Tax", TaxColor, 100, 100, 0, 0, 0));
     slots.push_back(Slot(39, "Boardwalk", sf::Color(0x284EA1FF), 400, 50, 200, 100, 600));
 
+
+    //get size of the slots vector
     boardsize = slots.size();
 
+    //calculate to know how much slots each side
     int slotsPerSide = (boardsize + 3) / 4; // Calculate number of slots per side (4 sides)
 
-    // Layout the slots on the board
+    // Layout(locate) the slots on the board - calculates the layout for these slots on the board, dividing them across the four sides of the board (top, right, bottom, left).
     //size of the board
     float xPos, yPos;
     const float slotWidth = windowSize.y / (slotsPerSide + 1)-10 ;  // Width of each slot (no gaps) change offset by minusing values to reduce size
@@ -66,7 +86,7 @@ void Game::createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::V
     {
         xPos = (((windowSize.x) - (slotWidth * slotsPerSide)) / 2) + (i * slotWidth); // Centering the top row
         yPos = 0;                                                                     // Fixed Y position for top row
-        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);                  // Set sprite position
+        slots[i].setSprite(xPos-150, yPos, font, slotWidth, slotHeight);    // Set sprite position
     }
 
     xPos += slotWidth;
@@ -101,9 +121,14 @@ void Game::createslot(std::vector<Slot> &slots, sf::Texture &slot_texture, sf::V
     }
 }
 
+// Handles the action when a player lands on a slot.
+// It checks if the slot is owned, if it's a railroad, company, or street, and processes rent payments if necessary.
+// If the slot is unowned, it gives the player the option to buy the slot.
 // handels the processing of each slot players lands on
 void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slot &slot, sf::RenderWindow &window, sf::Text &message, int d1, int d2, int &numplayers)
 {
+    message.setString("");
+
     // check if slot is owned by any player
     if (slot.getIsOwned())
     {
@@ -115,19 +140,26 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
             Player *railroadOwner;
             for (auto &p : players)
             {
-                if (p.getName() == slot.getOwnerName())
+                if (p.getName() == slot.getOwnerName()) //check if slot that the player currently stand , have owner
                 {
-                    if (p.getName() == player.getName())
+                    if (p.getName() == player.getName()) //if it the owner of the current player(currTurn)
                     {
                         flag = true;
                     }
                     railroadOwner = &p;
-                }
+                    rent = railroadOwner->railRoadOwned() * 50; //rent=rent(50) * trains he own
+                    slot.setRent(rent);
+
+                }//
             }
-            rent = railroadOwner->railRoadOwned() * 50;
-            if (!flag)
+            if (!flag) //if you are not the owner of the train and you stand on the slot
             {
-                if (player.checkBankruptcy(rent, railroadOwner))
+
+                std::cout << " owner:."<< railroadOwner->getName();
+
+                  std::cout << " slot.setRent(rent);."<< slot.getRent() << endl ;
+
+                if (player.checkBankruptcy(rent, railroadOwner)) //if you dont have money to pay
                 {
                     message.setString(player.getName() + " went bankrupt!\n");
                 }
@@ -142,29 +174,35 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
         // check if slot is company
         else if (slot.getColorGroup() == CompanyColor)
         {
-            rent = (d1 + d2) * 10;
+            rent = (d1 + d2) * 10; //rent= sum of dice * 10
+         
             Player *companyowner;
             for (auto &p : players)
             {
-                if (p.getName() == slot.getOwnerName())
+                if (p.getName() == slot.getOwnerName()) //check if slot that the player currently stand , have owne
                 {
-                    if (p.getName() == player.getName())
+                    if (p.getName() == player.getName()) //if it the owner of the current player(currTurn)
                     {
                         flag = true;
                     }
                     companyowner = &p;
                 }
             }
-            if (!flag)
+            if (!flag) //if you are not the owner of the company and you stand on the slot
             {
-                if (player.checkBankruptcy(rent, companyowner))
+
+                  std::cout << " owner:."<< companyowner->getName();
+
+                  std::cout << " slot.setRent(rent);."<< slot.getRent() << endl ;
+
+                if (player.checkBankruptcy(rent, companyowner)) //if you dont have money to pay
                 {
                     message.setString(player.getName() + " went bankrupt!\n");
                 }
                 else
                 {
-
-                    companyowner->setMoney(companyowner->getMoney() + rent); // Update railroad owner's money
+                    
+                    companyowner->setMoney(companyowner->getMoney() + rent); // Update company owner's money
                     player.setMoney(player.getMoney() - rent); // Deduct rent from the player's money
                 }
             }
@@ -172,27 +210,37 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
         // check if slot is street
         else
         {
-            rent = slot.calculateRent();
+
+            //std::cout << " you are ownerrrrr.\n";
+
+            rent = slot.calculateRent(); //calculate the rent 
+           // std::cout << " slot.setRent(rent);."<< slot.getRent() << endl ;
+
             Player *slotOwner;
             for (auto &p : players)
             {
-                if (p.getName() == slot.getOwnerName())
+                if (p.getName() == slot.getOwnerName()) //check if slot that the player currently stand , have owne
                 {
-                    if (p.getName() == player.getName())
+                    if (p.getName() == player.getName()) //if it the owner of the current player(currTurn)
                     {
                         flag = true;
                     }
                     slotOwner = &p;
                 }
             }
-            if (!flag)
+            if (!flag) //if you are not the owner of the slot and you stand on the slot
             {
-                if (player.checkBankruptcy(rent, slotOwner))
+
+               // std::cout << " you are not the owner of the company and you stand on the slot.\n";
+
+                if (player.checkBankruptcy(rent, slotOwner)) //if you dont have money to pay
                 {
                     message.setString(player.getName() + " went bankrupt!\n");
                 }
                 else
                 {
+                   // std::cout << " owner:."<< slotOwner->getName();
+                    //std::cout << " notowner:."<< player.getName();
 
                     slotOwner->setMoney(slotOwner->getMoney() + rent); // Update slot owner's money
                     player.setMoney(player.getMoney() - rent); // Deduct rent from the player's money
@@ -211,8 +259,9 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
         std::cout << player.getName() << " pays $" << rent << " rent to the owner of " << slot.getName() << std::endl;
         message.setString(player.getName() + " pays $" + std::to_string(rent) + " rent to the owner of " + slot.getName());
     }
-    else
+    else     // if the slot is NOT owned by any player
     {
+
 
         // Create Yes and No buttons
         Button yesButton(50, 500, 100, 50, "Yes");
@@ -241,7 +290,19 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
         bool wantsToBuy = false; // Keep track of player's decision
 
         while (!decisionMade && window.isOpen())
-        {
+        { 
+            message.setFillColor(sf::Color::Blue);
+            message.setString(slot.getName() +
+            "\nPrice: " + to_string(slot.getPrice())  + "$"
+            "\nRent: " + to_string(slot.getRent())  + "$"
+            "\nhousePrice: " + to_string(slot.getPrice())  + "$"
+            "\nrentWithHouse: " + to_string(slot.getRentWithHouse())  + "$"
+            "\nrentWithHotel " + to_string(slot.getRentWithHotel())  + "$");
+
+            window.draw(message);
+           message.setFillColor(sf::Color::White);
+            
+            
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -282,25 +343,90 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
             }
         }
 
-        if (wantsToBuy)
+        if (wantsToBuy) //if user press YES
         {
-            if (player.buySlot(slot))
+            if (player.buySlot(slot)) //IF WANT TO BUY SLOT AND HE GOT ENOUGH MONEY
             {
                 slot.setIsOwned(true);
+                 
                 std::cout << player.getName() << " bought " << slot.getName() << " for $" << slot.getPrice() << std::endl;
                 message.setString(player.getName() + " bought " + slot.getName()  + " for $" + std::to_string(slot.getPrice()));
-                std::cout << &slot << std::endl;
+                //std::cout << &slot << std::endl;
             }
-            else
+            else //if PLAYER NOT HAVE ENOUGH MONEY
             {
                 std::cout << player.getName() << " cannot buy " << slot.getName()  << std::endl;
                 message.setString(player.getName() + " cannot buy " + slot.getName() );
             }
         }
-        else
+        else //if user press NO
         {
             std::cout << player.getName() << " decided not to buy " << slot.getName()  << std::endl;
             message.setString(player.getName() + " decided not to buy " + slot.getName() );
         }
     }
 }
+
+// Handles the different outcomes when a player lands on a specific slot.
+// It checks the type of the slot (Chance, Community Chest, Tax, Street, or Go to Jail)
+// and performs the appropriate action, such as drawing a card, collecting tax, or going to jail.
+    //caseforslot
+   void Game::CasesForHandlingSlot(Player &player, std::vector<Player> &players, sf::Text &MessageChance, sf::Text &MessageSlot, float &elapsedTimeSlot, float &elapsedTimechance, sf::RenderWindow &window, std::vector<Dice> &d, int &numplayers)
+    {
+        // Clear any previous messages first
+           MessageChance.setString("");
+            MessageSlot.setString("");
+
+        // check if current slot is chance or community chest(surprise)
+        if (player.getCurrSlot()->getColorGroup() == ChanceColor || player.getCurrSlot()->getColorGroup() == CommunityChestColor)
+        {
+            Chance_CommunityChest(player, MessageChance, players);
+            MessageSlot.setString(player.getName() + " landed on chance/communitychest");
+            std::cout << player.getName() << " landed on chance/communitychest.\n";
+            elapsedTimeSlot = 0;
+            elapsedTimechance = 0; //Reset the timers after the player lands on a new slot or takes an action.
+        }
+        // check if current slot is a street that can be bought
+        if (player.getCurrSlot()->getColorGroup() != CornerColor && player.getCurrSlot()->getColorGroup() != TaxColor && player.getCurrSlot()->getColorGroup() != ChanceColor && player.getCurrSlot()->getColorGroup() != CommunityChestColor)
+        {
+            handleLandingOnSlot(player, players, *(player.getCurrSlot()), window, MessageSlot, d[0].getCurrFace(), d[1].getCurrFace(), numplayers);
+            elapsedTimeSlot = 0;
+            elapsedTimechance = 0;
+        }
+        // check if player is on taxable slot
+        else if (player.getCurrSlot()->getColorGroup() == TaxColor)
+        {
+            collectTax(player, MessageSlot, numplayers, players);
+            elapsedTimeSlot = 0;
+            elapsedTimechance = 0;
+        }
+        // check if player is on go to jail slot
+        else if (player.getCurrSlot()->getColorGroup() == CornerColor && player.getCurrSlot()->getName() == "Go to Jail")
+        {
+            goToJail(player, MessageSlot);
+            elapsedTimeSlot = 0;
+            elapsedTimechance = 0;
+        }
+
+         // Make sure to update the window after message changes
+            window.clear();
+            window.draw(MessageSlot);
+            window.draw(MessageChance);
+            window.display();
+
+    }
+
+    void Game::collectTax(Player &player, sf::Text &message, int &numPlayers, std::vector<Player> &players)
+    {
+        // checks if player can pay for tax
+        if (player.checkBankruptcy(player.getCurrSlot()->getRent()))
+        {
+            message.setString(player.getName() + " went bankrupt!\n");
+        }
+        else
+        {
+            player.setMoney(player.getMoney() - player.getCurrSlot()->getRent());
+            std::cout << player.getName() << " paid tax of " << player.getCurrSlot()->getRent() << ".\n";
+            message.setString(player.getName() + " paid tax of " + std::to_string(player.getCurrSlot()->getRent()) + ".\n");
+        }
+    }
