@@ -381,7 +381,6 @@ void Game::handleLandingOnSlot(Player &player, std::vector<Player> &players, Slo
         if (player.getCurrSlot()->getColorGroup() == ChanceColor || player.getCurrSlot()->getColorGroup() == CommunityChestColor)
         {
             Chance_CommunityChest(player, MessageChance, players);
-            MessageSlot.setString(player.getName() + " landed on chance/communitychest");
             std::cout << player.getName() << " landed on chance/communitychest.\n";
             elapsedTimeSlot = 0;
             elapsedTimechance = 0; //Reset the timers after the player lands on a new slot or takes an action.

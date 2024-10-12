@@ -21,7 +21,9 @@
           turnsInJail(0),
            houses(0), 
            hotels(0), 
-          isbankrupt(false) //if player with no money is bankrupt
+          isbankrupt(false) , //if player with no money is bankrupt
+          samePositionLastTurn(false)
+        //  doubleCounter(3)
           {} 
 
 
@@ -412,7 +414,16 @@ The railRoadOwned() function is designed to count
             if (creditor)
             {
                 // Transfer all assets to the creditor
-                creditor->money += money;          
+                creditor->money += money;       
+
+            for (auto& slot : ownedSlots)
+            {
+               
+                    // Set the owner of the slot to the creditor
+                    slot->setOwnerName(creditor->getName());
+              }
+
+
                 // insert(where to put,from where, until where)                                                            // Transfer money
                 creditor->ownedSlots.insert(creditor->ownedSlots.end(), ownedSlots.begin(), ownedSlots.end()); // Transfer properties
                 money = 0;
@@ -432,6 +443,7 @@ The railRoadOwned() function is designed to count
             }
             setPos(SlotList[0].getSlotShape().getPosition().x, 0); //The player’s position is reset to the starting position on the game board
             isbankrupt = true;
+
             return true; // Indicate bankruptcy
         }
         isbankrupt = false;
@@ -451,6 +463,8 @@ The railRoadOwned() function is designed to count
 
         int previousPosition = position; // Store previous position
         position = (position + i) % boardsize; // Update position
+
+        samePositionLastTurnFunction(previousPosition,position,samePositionLastTurn);
 
         // Check if the player passed "Go"
         if (position < previousPosition )
@@ -557,7 +571,10 @@ The railRoadOwned() function is designed to count
     int Player::getPosition() const { return position; }
     int Player::getMoney() const { return money; }
     bool Player::isInJail() const { return inJail; }
-    bool Player::isBankrupt() const { return isbankrupt; }
+    bool Player::isBankrupt() const { 
+     if(isbankrupt){
+    std::cout <<  name<< ", is Bankrupt!  " << std::endl;}
+        return isbankrupt; }
     void Player::setPosition(int newPosition) { position = newPosition; }
     void Player::setMoney(int newMoney) { money = newMoney; }
     void Player::setInJail(bool jailed) { inJail = jailed; }
@@ -601,3 +618,12 @@ void Player::incrementTurnsInJail()
     // Getter for currSlot
     Slot* Player::getCurrSlot() const { return currSlot; }
 
+/*
+int Player::getDoubleCounter() const{
+    return doubleCounter;
+}
+
+void Player::setDoubleCounter(int doubleC){
+
+    doubleCounter=doubleC;
+}*/

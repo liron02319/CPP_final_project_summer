@@ -199,7 +199,6 @@ using namespace std;
 
         Button button(10, 122, 134, 50, "Roll");       // Create button for rolling the dice
         Button buttonBuild(10, 190, 134, 50, "Build"); // Create button for building huse/hotel
-        int turnToPressButtonBuild=0;
 
 
         // create clock for timing message shown of chance
@@ -252,7 +251,6 @@ using namespace std;
             sf::Event eve;
             while (window.pollEvent(eve))
             {
-                turnToPressButtonBuild++;
                 
                 if (eve.type == sf::Event::Closed) // If cross/close is clicked/pressed
                     window.close();                // close the game
@@ -325,10 +323,10 @@ using namespace std;
                                     if (players[i].getOwnedSlots()[j]->getSlotShape().getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                                         // Display slot details
                                         Slot* clickedSlot = players[i].getOwnedSlots()[j];
-                                        std::string details = "Name: " + clickedSlot->getName() + "\nRent: $" + std::to_string(clickedSlot->getRent());
+                                        std::string details = "Name: " + clickedSlot->getName() + "\nOwner:"  + clickedSlot->getOwnerName() +"\nRent: " + std::to_string(clickedSlot->getRent())+"\nhousePrice: " + std::to_string(clickedSlot->getHousePrice());
                                         slotDetailsText.setString(details);
 
-                                                        std::cout << "Clicked Slot: " << clickedSlot->getName() << ", Rent: " << clickedSlot->getRent() << std::endl;
+                                        std::cout << "Clicked Slot: " << clickedSlot->getName() << ", Rent: " << clickedSlot->getRent() << std::endl;
                                         break; // Exit the loop if a slot is clicked
                                     }
                                 }
@@ -505,7 +503,7 @@ using namespace std;
                 if(buttonBuild.isClicked(sf::Mouse::getPosition(window), eve)) //if button build clicked
                 {
 
-                     if (((players[currTurn].getCurrSlot()->getOwnerName())) == players[currTurn].getName() && players[currTurn].canBuildHouse(*(players[currTurn].getCurrSlot())) && turnToPressButtonBuild%4==0)
+                     if (((players[currTurn].getCurrSlot()->getOwnerName())) == players[currTurn].getName() && players[currTurn].canBuildHouse(*(players[currTurn].getCurrSlot())) && players[currTurn].getSamePositionLastTurn()==false )
                         {
                             // Enable the build button because the player owns this slot
                             players[currTurn].buildHouse(*(players[currTurn].getCurrSlot()));
@@ -544,27 +542,31 @@ using namespace std;
                 // After updating the text, ensure the window is refreshed
    
 
+                playersLeft = 0;
+                for (int i = 0; i < numPlayer; i++)
+                {
+                    if (players[i].isBankrupt() == false)
+                    {
+                        playersLeft++;
+                        winner = &players[i];
+                    }
+                }
+             
   
             }
-            // check if more than one player remain
-            playersLeft = 0;
-            for (int i = 0; i < numPlayer; i++)
-            {
-                if (players[i].isBankrupt() == false)
+
+   if (playersLeft == 1)
                 {
-                    playersLeft++;
-                    winner = &players[i];
+                    break;
                 }
-            }
-            if (playersLeft == 1)
-            {
-                break;
-            }
+
+            // check if more than one player remain
+           
             // checks if one player has more than 4000 money
             bool moremoney = false;
             for (int i = 0; i < numPlayer; i++)
             {
-                if (players[i].getMoney() >= 4000)
+                if (players[i].getMoney() >= 10000)
                 {
                     moremoney = true;
                     winner = &players[i];
@@ -626,11 +628,11 @@ using namespace std;
             buttonBuild.draw(window); // Draw button
 
             //slot and messages disapear after 2 sec
-            if (elapsedTimechance < 2) //print messages
+            if (elapsedTimechance < 3) //print messages
                  window.draw(slotDetailsText);
-            if (elapsedTimechance < 2) //print messages
+            if (elapsedTimechance < 3) //print messages
                 window.draw(MessageChance);
-            if (elapsedTimeSlot < 2)
+            if (elapsedTimeSlot < 3)
                 window.draw(MessageSlot);
             window.display();
         }

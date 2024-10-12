@@ -6,6 +6,7 @@
 // function for assigning chance when player lands on a surprise slot
 void Game::Chance_CommunityChest(Player &player, sf::Text &MessageChance, std::vector<Player> &players)
 {
+    MessageChance.setString(player.getName() + " landed on chance/communitychest");
 
     int random_outcome = rand() % 16; // can give any outcome of the 16
     if (random_outcome == 0)

@@ -26,7 +26,7 @@ private:
     sf::RectangleShape player_border; //This variable represents a rectangular shape around the player’s sprite, likely used for visual boundaries or highlighting the player’s presence on the board.
     std::vector<Slot *> ownedSlots; // This vector keeps track of pointers to the Slot objects, owned by the player. Using pointers allows for efficient memory usage and manipulation of slot ownership without unnecessary copies.
     bool isbankrupt; //whether the player is bankrupt.
-
+    bool samePositionLastTurn;
 
 public:
 
@@ -199,8 +199,31 @@ void incrementTurnsInJail();
 
 
 bool hasCompleteSet(Slot &slot) ;
-int getMinHouseCountInSet(Slot &slot);
+int getMinHouseCountInSet(Slot &slot) const;
 
+//oid setDoubleCounter(int doubleC);
+
+//int getDoubleCounter() const;
+
+
+
+//if was in same positon slot (if yes cant use buttonbuild)
+void samePositionLastTurnFunction(int previousPosition,int position,bool& samePositionLastTurn){
+
+
+    if(previousPosition==position){
+        samePositionLastTurn=true;
+    }
+    else{
+        samePositionLastTurn=false;
+    }
+    
+}
+
+bool getSamePositionLastTurn() const
+{
+    return samePositionLastTurn;
+}
 
 
 };

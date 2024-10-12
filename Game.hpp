@@ -35,6 +35,9 @@ private:
     sf::Color TaxColor; //this stores the color of Tax slots. Tax slots usually charge the player a fee or penalty
     sf::Color CornerColor; //This stores the color of the corner slots, which could include special places like "Go", "Jail", or "Free Parking"
 
+    int doubleCounter;
+
+    
 public:
     Game() ;
 
