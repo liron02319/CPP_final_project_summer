@@ -123,6 +123,12 @@ using namespace std;
         // Create slots
         sf::Font font;
         font.loadFromFile("Fonts/bebas/Bebas-Regular.ttf");
+        if (!font.loadFromFile("Fonts/bebas/Bebas-Regular.ttf"))
+            {
+                std::cerr << "Error loading font\n";
+            }
+
+
         std::vector<Slot> slots;
         //create the board-make the slots visualy(It sets the position of each slot on the screen (X and Y coordinates) using setSprite(), which aligns them visually on the board.)
         createslot(slots, windowSize, font);
@@ -211,7 +217,7 @@ using namespace std;
         slotDetailsText.setFont(PlayerInfoFont); // Assuming PlayerInfoFont is already loaded
         slotDetailsText.setCharacterSize(24);
         slotDetailsText.setFillColor(sf::Color::White);
-        slotDetailsText.setPosition(boardrightcolend - 10, boardTopRowBottom + 50); //Sets the position of the text on the screen.
+        slotDetailsText.setPosition(boardrightcolend -10, boardTopRowBottom + 50); //Sets the position of the text on the screen.
 
         // create message that shows on chance card
         sf::Text MessageChance, MessageSlot; //This class is used to create and manage text displayed on the screen.
@@ -223,7 +229,7 @@ using namespace std;
 
         // create message that shows on slot action
         MessageSlot.setFont(PlayerInfoFont);
-        MessageSlot.setPosition(boardrightcolend + 10, boardBottomRowTop - 10);
+        MessageSlot.setPosition(boardrightcolend + 10, boardBottomRowTop -120);
         MessageSlot.setCharacterSize(24);
         MessageSlot.setFillColor(sf::Color::White);
         MessageSlot.setString("");
@@ -392,10 +398,11 @@ using namespace std;
                                 currTurn = (currTurn + 1) % numPlayer;
                                 while (players[currTurn].isBankrupt())
                                     currTurn = (currTurn + 1) % numPlayer;
-                                CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                                    
+                              //  CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
                                 gameClock.restart();
-                                for (int i = 0; i < numPlayer; i++)
-                                    PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
+                                //for (int i = 0; i < numPlayer; i++)
+                                  //  PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
                                 PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
                                 players[currTurn].setActive();
                             }
@@ -422,13 +429,18 @@ using namespace std;
                             currTurn = (currTurn + 1) % numPlayer;
                             while (players[currTurn].isBankrupt())
                                 currTurn = (currTurn + 1) % numPlayer;
-                            CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
-                            gameClock.restart();
+
+
+                           // CasesForHandlingSlot(players[currTurn], players, MessageChance, MessageSlot, elapsedTimeSlot, elapsedTimechance, window, d, numPlayer);
+                           // gameClock.restart();
                             for (int i = 0; i < numPlayer; i++)
                                 PlayerInfoText[i].setString(players[i].getName() + "\n$" + to_string(players[i].getMoney()));
                             PlayerInfoText[currTurn].setFillColor(sf::Color::Yellow);
                             players[currTurn].setActive();                   
                             gameClock.restart();
+
+                            break; // Skip their turn, do not handle the slot or show messages
+
 
                             
                         }
@@ -566,7 +578,7 @@ using namespace std;
             bool moremoney = false;
             for (int i = 0; i < numPlayer; i++)
             {
-                if (players[i].getMoney() >= 10000)
+                if (players[i].getMoney() >= 4000)
                 {
                     moremoney = true;
                     winner = &players[i];
